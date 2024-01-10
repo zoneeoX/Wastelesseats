@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "272265334322",
+    "project_id": "wastelesseats-api",
+    "storage_bucket": "wastelesseats-api.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272265334322:android:e95c0acf203b847023362b",
+        "android_client_info": {
+          "package_name": "app.wastelesseats"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWuVchXxt1Ma2nx0rYMrZD5qy3h0IGQOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
