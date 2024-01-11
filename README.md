@@ -1,6 +1,16 @@
 Wastelesseats
+Deskripsi Tim :
+Hacker :
+Fadel Najmi Adliansyah
+Raja Revanery Ramadhan
 
-Screenshot Aplikasi (Authentication Tab -> Map -> Donate Screen (Main Feature) -> Notifications (Main Feature)
+Hustler : 
+Muhammad Syifa Ghazaly
+
+Hipster :
+Usamah Abdul Aziz
+
+Screenshot Aplikasi (Main Feature : Buying and Selling(Donation Feature) )
 Main Feature(Stage 2) :
 ![MapView](https://github.com/zoneeoX/Wastelesseats/assets/26033026/0fe6ae1a-d106-4fa3-aae9-c7fb59799640)
 ![Donate Tab](https://github.com/zoneeoX/Wastelesseats/assets/26033026/2433ce18-4faa-4f81-af49-22253beb300e)
@@ -24,17 +34,3 @@ Classification Data (Deteksi makanan busuk atau makanan masih layak dikonsumsi)
 ![Klasifikasi](https://github.com/zoneeoX/Wastelesseats/assets/26033026/b191c9a2-e992-40e3-920e-70c78f40fad1)
 
 
-
-
-
-
-Deskripsi Tim :
-Hacker :
-Fadel Najmi Adliansyah
-Raja Revanery Ramadhan
-
-Hustler : 
-Muhammad Syifa Ghazaly
-
-Hipster :
-Usamah Abdul Aziz
