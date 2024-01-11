@@ -3,7 +3,7 @@ Wastelesseats
 Deskripsi Tim :
 
 Hacker :
-Fadel Najmi Adliansyah
+Fadel Najmi Adliansyah, 
 Raja Revanery Ramadhan
 
 Hustler : 
@@ -13,17 +13,16 @@ Hipster :
 Usamah Abdul Aziz
 
 Fitur Didalam Aplikasi:
-Authentication
-Map View
-Donate (Transcation) -> Sequence diagram from stage 1
-Classification Food (Deteksi makanan masih layak dimakan atau tidak)
+Authentication, 
+Map View,
+Donate (Transcation) -> Sequence diagram from stage 1,
+Classification Food (Deteksi makanan masih layak dimakan atau tidak),
 
 
 
 
 
-Screenshot Aplikasi (Main Feature : Buying and Selling(Donation Feature) )
-Main Feature(Stage 2) :
+Screenshot Aplikasi (Main Feature : Buying and Selling(Donation Feature))
 ![MapView](https://github.com/zoneeoX/Wastelesseats/assets/26033026/0fe6ae1a-d106-4fa3-aae9-c7fb59799640)
 ![Donate Tab](https://github.com/zoneeoX/Wastelesseats/assets/26033026/2433ce18-4faa-4f81-af49-22253beb300e)
 ![DonateTabChildren](https://github.com/zoneeoX/Wastelesseats/assets/26033026/b25a9351-4e70-4815-8977-99f281b96cc7)
