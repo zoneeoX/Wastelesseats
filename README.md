@@ -10,6 +10,16 @@ Muhammad Syifa Ghazaly
 Hipster :
 Usamah Abdul Aziz
 
+Fitur Didalam Aplikasi:
+Authentication
+Map View
+Donate (Transcation) -> Sequence diagram from stage 1
+Classification Food (Deteksi makanan masih layak dimakan atau tidak)
+
+
+
+
+
 Screenshot Aplikasi (Main Feature : Buying and Selling(Donation Feature) )
 Main Feature(Stage 2) :
 ![MapView](https://github.com/zoneeoX/Wastelesseats/assets/26033026/0fe6ae1a-d106-4fa3-aae9-c7fb59799640)
