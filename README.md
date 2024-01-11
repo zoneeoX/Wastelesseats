@@ -22,7 +22,7 @@ Classification Food (Deteksi makanan masih layak dimakan atau tidak),
 
 
 
-Screenshot Aplikasi (Main Feature : Buying and Selling(Donation Feature))
+Screenshot Aplikasi
 ![MapView](https://github.com/zoneeoX/Wastelesseats/assets/26033026/0fe6ae1a-d106-4fa3-aae9-c7fb59799640)
 ![Donate Tab](https://github.com/zoneeoX/Wastelesseats/assets/26033026/2433ce18-4faa-4f81-af49-22253beb300e)
 ![DonateTabChildren](https://github.com/zoneeoX/Wastelesseats/assets/26033026/b25a9351-4e70-4815-8977-99f281b96cc7)
