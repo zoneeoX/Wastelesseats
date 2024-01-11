@@ -23,14 +23,17 @@ Main Feature(Stage 2) :
 ![ItemSold](https://github.com/zoneeoX/Wastelesseats/assets/26033026/f568172f-b462-4f55-aeff-3d5138ab3287)
 
 Authentication Feature:
+
 ![Login](https://github.com/zoneeoX/Wastelesseats/assets/26033026/ac831200-ff86-4d3c-9b3f-70ec47f066f2)
 ![Register](https://github.com/zoneeoX/Wastelesseats/assets/26033026/12bf432d-f520-496b-ae56-54801a6917b3)
 
 
 Dark Mode:
+
 ![DarkMode](https://github.com/zoneeoX/Wastelesseats/assets/26033026/872e0a26-e746-48cd-919a-5e37b72fdd95)
 
-Classification Data (Deteksi makanan busuk atau makanan masih layak dikonsumsi)
+Classification Data (Deteksi makanan busuk atau makanan masih layak dikonsumsi):
+
 ![Klasifikasi](https://github.com/zoneeoX/Wastelesseats/assets/26033026/b191c9a2-e992-40e3-920e-70c78f40fad1)
 
 
