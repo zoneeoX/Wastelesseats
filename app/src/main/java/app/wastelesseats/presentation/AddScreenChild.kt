@@ -4,15 +4,20 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,6 +56,7 @@ fun AddScreenChild(
     var lng: Double by remember { mutableStateOf(0.0)}
     var description: String by remember { mutableStateOf("")}
     var userId: String by remember { mutableStateOf("")}
+    var price: Int by remember { mutableStateOf(0)}
 
     val auth = FirebaseAuth.getInstance()
     val currentUser = auth.currentUser
@@ -81,23 +87,42 @@ fun AddScreenChild(
 
 
     Column(modifier = Modifier.fillMaxSize()) {
-        IconButton(onClick = { navController.navigate(Screens.MapScreen.route) }) {
-            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back Button")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back Button")
+            }
+            Icon(
+                imageVector = Icons.Default.ShoppingBag,
+                contentDescription = "Shopping Icon",
+                modifier = Modifier
+                    .size(48.dp)
+            )
+            Text(
+                text = "Donate Tab",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Box(Modifier.size(48.dp))
         }
 
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top
         ) {
 
             OutlinedTextField(
                 modifier = Modifier.padding(top = 24.dp).fillMaxWidth(),
                 value = title,
                 onValueChange = { title = it },
-                label = { Text(text = "Title") }
+                label = { Text(text = "Item Title") }
             )
             OutlinedTextField(
                 modifier = Modifier.padding(top = 24.dp).fillMaxWidth(),
@@ -107,14 +132,22 @@ fun AddScreenChild(
                 placeholder = { Text(text = "YYYY/MM/DD")}
             )
             OutlinedTextField(
+                modifier = Modifier.padding(top = 24.dp).fillMaxWidth(),
+                value = price.toString(),
+                onValueChange = { newValue ->
+                    price = newValue.toIntOrNull() ?: 0
+                },
+                label = { Text(text = "Item Price") },
+            )
+            OutlinedTextField(
                 modifier = Modifier
                     .padding(top = 24.dp)
                     .fillMaxWidth(),
                 value = description,
                 onValueChange = { description = it },
-                label = { Text(text = "Description") },
+                label = { Text(text = "Item Description") },
                 placeholder = { Text(text = "Item Description") },
-                maxLines = 5,
+                maxLines = 8, // Increased number of lines
                 singleLine = false,
             )
 
@@ -142,6 +175,7 @@ fun AddScreenChild(
                                     lat = lat,
                                     lng = lng,
                                     description = description,
+                                    price = price,
                                 )
                                 sharedViewModel.saveData(userData = markerData, context = context)
                             }

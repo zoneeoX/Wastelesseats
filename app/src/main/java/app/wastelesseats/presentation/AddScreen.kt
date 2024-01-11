@@ -117,7 +117,10 @@ fun AddScreen(
                                 .weight(1f)
                         ) {
                             Text(text = item.title ?: "", fontWeight = FontWeight.Bold)
-                            Text(text = "Rp. Example Price", color = Color.Gray)
+                            Text(
+                                text = if (item.price == 0) "Free" else "Rp. ${item.price}",
+                                color = if (item.price == 0) Color.Gray else Color.Black
+                            )
                         }
                     }
                 }

@@ -1,7 +1,11 @@
 package app.wastelesseats.presentation
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,6 +37,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -57,14 +62,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import app.wastelesseats.R
+import app.wastelesseats.util.SharedViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.firebase.auth.FirebaseAuth
-
-
-
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.rememberCameraPositionState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,6 +83,7 @@ fun MarkerInfoBox(
     markerData: MarkerData,
     onClose: () -> Unit,
     currentUserId: String,
+    onBuyClick: (MarkerData) -> Unit
 ) {
     val darkerGreen = Color(0xFF0CBC8B)
 
@@ -108,9 +119,9 @@ fun MarkerInfoBox(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Rp. Price",
+                text = if(markerData.price == 0) "Free" else "Rp. ${markerData.price}",
+                color = if (markerData.price == 0) Color.Gray else darkerGreen,
                 fontSize = 16.sp,
-                color = darkerGreen,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
@@ -145,19 +156,34 @@ fun MarkerInfoBox(
                 )
             } else {
                 Button(
-                    onClick = onClose,
+                    onClick = {
+                        if (markerData.status == "Available") {
+                            onBuyClick.invoke(markerData)
+                        } else {
+                            //test
+                        }
+                    },
+                    enabled = markerData.status == "Available",
+
                     modifier = Modifier
                         .padding(vertical = 8.dp)
                         .fillMaxWidth()
                         .height(50.dp)
-                        .background(color = darkerGreen, shape = RoundedCornerShape(12.dp)),
+                        .background(
+                            color = if (markerData.status == "Available") darkerGreen else Color.Gray, // Use gray background for disabled button
+                            shape = RoundedCornerShape(12.dp)
+                        ),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = darkerGreen,
+                        containerColor = if (markerData.status == "Available") darkerGreen else Color.Gray,
                         contentColor = Color.White
                     )
                 ) {
                     Text(
-                        text = "Buy",
+                        text = when (markerData.status) {
+                            "Available" -> "Buy"
+                            "Pending" -> "Item Is Pending"
+                            else -> "Item Sold"
+                        },
                         color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
@@ -188,7 +214,6 @@ fun ClusterMarkerDialog(
         text = {
             Column {
                 markers.forEachIndexed { index, marker ->
-                    // Display divider between markers (except the first one)
                     if (index > 0) {
                         Divider(color = Color.Gray, thickness = 1.dp)
                     }
@@ -237,7 +262,8 @@ fun bitmapDescriptorFromVector(
 fun MapScreen(
     viewModel: MapsViewModel = viewModel(),
     navController: NavController,
-    onOpen: () -> Unit
+    onOpen: () -> Unit,
+    sharedViewModel: SharedViewModel,
 ) {
     val uiSettings = remember {
         MapUiSettings(zoomControlsEnabled = false)
@@ -251,6 +277,28 @@ fun MapScreen(
     val iconResourceIdMultiple = R.drawable.multiple
     val icon = bitmapDescriptorFromVector(context,iconResourceId,75,75)
     val iconMultiple = bitmapDescriptorFromVector(context,iconResourceIdMultiple,75,75)
+    val cameraPositionState = rememberCameraPositionState()
+
+    val fusedLocationClient: FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(LocalContext.current)
+    val locationPermissionRequestCode = 1001
+
+
+    LaunchedEffect(Unit) {
+        val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
+        val hasPermission = ContextCompat.checkSelfPermission(
+            context,
+            locationPermission
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(locationPermission),
+                locationPermissionRequestCode
+            )
+        }
+    }
 
 
 
@@ -266,7 +314,9 @@ fun MapScreen(
                 val lat = document.getDouble("lat") ?: 0.0
                 val lng = document.getDouble("lng") ?: 0.0
                 val description = document.getString("description") ?: ""
-                val marker = MarkerData(id, userId, title, expired, lat, lng, description)
+                val price = document.getLong("price")?.toInt() ?: 0
+                val status = document.getString("status")?: ""
+                val marker = MarkerData(id, userId, title, expired, lat, lng, description, price, status)
                 updatedMarkers.add(marker)
             }
 
@@ -323,10 +373,13 @@ fun MapScreen(
 
 
 
+
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             properties = viewModel.state.properties,
-            uiSettings = uiSettings
+            uiSettings = uiSettings,
+            cameraPositionState = cameraPositionState,
+
         ) {
             val markerLocations = mutableMapOf<Pair<Double, Double>, List<MarkerData>>()
 
@@ -393,7 +446,16 @@ fun MapScreen(
                 MarkerInfoBox(
                     markerData = selectedMarker!!,
                     onClose = { selectedMarker = null },
-                    currentUserId = currentUserId.toString()
+                    currentUserId = currentUserId.toString(),
+                    onBuyClick = { marker ->
+                        sharedViewModel.initiateBuy(
+                            marker,
+                            onSuccess = {
+                                Toast.makeText(context, "Buy initiated successfully", Toast.LENGTH_SHORT).show()
+                            },
+
+                        )
+                    }
                 )
             }
 
@@ -401,10 +463,21 @@ fun MapScreen(
                 MarkerInfoBox(
                     markerData = selectedMarkerForDetails!!,
                     onClose = { selectedMarkerForDetails = null },
-                    currentUserId = currentUserId.toString()
+                    currentUserId = currentUserId.toString(),
+                    onBuyClick = { marker ->
+                        sharedViewModel.initiateBuy(
+                            marker,
+                            onSuccess = {
+                                Toast.makeText(context, "Buy initiated successfully", Toast.LENGTH_SHORT).show()
+                            },
+
+                        )
+                    }
                 )
             }
         }
+
+
     }
 }
 

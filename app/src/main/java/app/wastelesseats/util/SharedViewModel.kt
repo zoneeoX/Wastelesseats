@@ -6,14 +6,22 @@ import android.service.autofill.UserData
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class SharedViewModel(): ViewModel() {
+
     fun saveData(
         userData: MarkerData,
         context: Context
@@ -33,9 +41,92 @@ class SharedViewModel(): ViewModel() {
         }
     }
 
+
+
+
+    fun updateStatusToPending(
+        itemId: String,
+        onSuccess: () -> Unit,
+
+    ) = CoroutineScope(Dispatchers.IO).launch {
+        val fireStoreRef = Firebase.firestore
+            .collection("markers")
+            .document(itemId)
+
+        try {
+            fireStoreRef.update("status", "Pending")
+                .addOnSuccessListener {
+                    onSuccess.invoke()
+                }
+                .addOnFailureListener { e ->
+                    //
+                }
+        } catch (e: Exception) {
+            //
+        }
+    }
+     fun updateStatusToSold(
+        itemId: String,
+
+        ) = CoroutineScope(Dispatchers.IO).launch {
+        val fireStoreRef = Firebase.firestore
+            .collection("markers")
+            .document(itemId)
+
+        try {
+            fireStoreRef.update("status", "Sold")
+                .addOnSuccessListener {
+                    //
+                }
+                .addOnFailureListener { e ->
+                    //
+                }
+        } catch (e: Exception) {
+            //
+        }
+
+    }
+
+    fun deleteItem(
+        itemId: String,
+
+        ) = CoroutineScope(Dispatchers.IO).launch {
+        val fireStoreRef = Firebase.firestore
+            .collection("markers")
+            .document(itemId)
+
+        try {
+            // Update the status to "Pending"
+            fireStoreRef.delete()
+                .addOnSuccessListener {
+                    //
+                }
+                .addOnFailureListener { e ->
+                    //
+                }
+        } catch (e: Exception) {
+            //
+        }
+    }
+
+    fun getMarkers(query: Query, onDataReceived: (List<MarkerData>) -> Unit) {
+        query.get()
+            .addOnSuccessListener { querySnapshot ->
+                val markerDataList = querySnapshot.toObjects<MarkerData>()
+                onDataReceived(markerDataList)
+            }
+            .addOnFailureListener { e ->
+                // Handle failure TODO later
+            }
+    }
+
+    fun initiateBuy(markerData: MarkerData, onSuccess: () -> Unit) {
+        updateStatusToPending(markerData.id, onSuccess = onSuccess)
+    }
+
     fun getUserUploadedItems(
         userId: String,
-        onDataReceived: (List<MarkerData>) -> Unit // Callback for handling retrieved items
+        onDataReceived: (List<MarkerData>) -> Unit
     ) {
         val fireStoreRef = Firebase.firestore
             .collection("markers")

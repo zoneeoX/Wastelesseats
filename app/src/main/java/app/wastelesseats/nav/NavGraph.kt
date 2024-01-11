@@ -29,7 +29,8 @@ fun NavGraph(
         ) {
             MapScreen(
                 navController = navController,
-                onOpen = onOpen
+                onOpen = onOpen,
+                sharedViewModel = sharedViewModel,
             )
         }
         //Add Screen

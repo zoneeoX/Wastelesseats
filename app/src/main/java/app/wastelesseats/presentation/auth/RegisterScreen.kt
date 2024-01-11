@@ -40,7 +40,7 @@ fun RegisterScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Your Logo", fontSize = 24.sp)
+        Text("Wastelesseats App", fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
         Text("Register", fontSize = 20.sp)

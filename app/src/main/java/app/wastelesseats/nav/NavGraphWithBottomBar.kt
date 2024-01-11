@@ -1,5 +1,6 @@
 package app.wastelesseats.nav
 
+import NotificationScreen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -37,10 +38,17 @@ fun NavGraphWithBottomBar(
             ) {
                 MapScreen(
                     navController = navController,
-                    onOpen = onOpen
+                    onOpen = onOpen,
+                    sharedViewModel = sharedViewModel
                 )
             }
             //Add Screen
+            composable(
+                route = Screens.NotificationScreen.route
+            ) {
+                NotificationScreen(navController = navController, sharedViewModel = sharedViewModel)
+            }
+
             composable(
                 route = Screens.AddScreen.route
             ) {

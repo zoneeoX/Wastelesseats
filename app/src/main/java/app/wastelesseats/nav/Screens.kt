@@ -3,6 +3,7 @@ package app.wastelesseats.nav
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -35,6 +36,12 @@ sealed class Screens(val route: String, val title: String, val icon: ImageVector
         route = "register_screen",
         title = "Register",
         icon = null
+    )
+
+    object NotificationScreen : Screens(
+        route = "notification_screen",
+        title = "Notification",
+        icon = Icons.Default.Notifications
     )
 }
 

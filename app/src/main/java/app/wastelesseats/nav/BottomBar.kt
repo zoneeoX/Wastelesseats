@@ -27,6 +27,7 @@ fun BottomBar(navController: NavController) {
     val screens = listOf(
         Screens.MapScreen,
         Screens.AddScreen,
+        Screens.NotificationScreen,
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()

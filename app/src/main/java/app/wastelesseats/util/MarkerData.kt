@@ -8,4 +8,6 @@ data class MarkerData(
     var lat: Double = 0.0,
     var lng: Double = 0.0,
     val description: String = "",
+    val price: Int = 0,
+    val status: String = "Available",
 )
