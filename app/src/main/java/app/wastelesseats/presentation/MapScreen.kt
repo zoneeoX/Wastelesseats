@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -52,6 +53,7 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -61,6 +63,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import app.wastelesseats.R
 import app.wastelesseats.util.SharedViewModel
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -116,7 +120,22 @@ fun MarkerInfoBox(
                     .background(color = Color.Gray, shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "Cth Gambar", color = Color.White)
+                markerData.imageUrl?.let { imageUrl ->
+                    val painter = rememberImagePainter(
+                        data = imageUrl,
+                        builder = {
+                            transformations(CircleCropTransformation())
+                        }
+                    )
+
+                    Image(
+                        painter = painter,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(CircleShape)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -345,7 +364,10 @@ fun MapScreen(
                 val description = document.getString("description") ?: ""
                 val price = document.getLong("price")?.toInt() ?: 0
                 val status = document.getString("status")?: ""
-                val marker = MarkerData(id, userId, title, expired, lat, lng, description, price, status)
+                val imageUrl = document.getString("imageUrl")?: ""
+                val category = document.getString("category")?: ""
+                val timestamp = document.getTimestamp("timestamp")?: null
+                val marker = MarkerData(id, userId, title, expired, lat, lng, description, price, status, timestamp, category, imageUrl)
                 updatedMarkers.add(marker)
             }
 

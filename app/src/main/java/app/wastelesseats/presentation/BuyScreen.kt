@@ -1,6 +1,7 @@
 package app.wastelesseats.presentation
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,12 +20,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.wastelesseats.util.MarkerData
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -60,11 +64,26 @@ fun BuyScreen(
     ) {
         Box(
             modifier = Modifier
-                .size(120.dp)
+                .size(160.dp)
                 .background(color = Color.Gray, shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "Cth Gambar", color = Color.White)
+            item.imageUrl.let { imageUrl ->
+                val painter = rememberImagePainter(
+                    data = imageUrl,
+                    builder = {
+                        transformations(CircleCropTransformation())
+                    }
+                )
+
+                Image(
+                    painter = painter,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(160.dp)
+                        .clip(CircleShape)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))

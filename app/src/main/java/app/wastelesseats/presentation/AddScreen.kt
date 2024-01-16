@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.widget.TextView
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +52,8 @@ import androidx.navigation.NavController
 import app.wastelesseats.nav.Screens
 import app.wastelesseats.util.MarkerData
 import app.wastelesseats.util.SharedViewModel
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.Firebase
@@ -78,10 +83,19 @@ fun AddScreen(
 
     Column(modifier = Modifier
         .fillMaxSize()
-        .verticalScroll(rememberScrollState())) {
-        IconButton(onClick = { navController.navigate(Screens.MapScreen.route) }) {
-            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back Button")
-        }
+        .verticalScroll(rememberScrollState())
+        .background(color = Color(250, 250, 250))
+
+    )
+    {
+        Text(
+            text = "Your Items",
+            modifier = Modifier
+                .padding(16.dp),
+            color = Color.Gray,
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.headlineMedium,
+            )
 
         if (userUploadedItems.isNotEmpty()) {
             Column(
@@ -97,7 +111,7 @@ fun AddScreen(
                             .padding(vertical = 8.dp)
                             .fillMaxWidth()
                             .background(
-                                color = Color.LightGray,
+                                color = Color.White,
                                 shape = RoundedCornerShape(8.dp)
                             )
                             .padding(8.dp),
@@ -111,8 +125,23 @@ fun AddScreen(
                                     shape = CircleShape
                                 ),
                             contentAlignment = Alignment.Center
-                        ){
-                            Text(text = "Img", color = Color.White)
+                        ) {
+                            item.imageUrl.let { imageUrl ->
+                                val painter = rememberImagePainter(
+                                    data = imageUrl,
+                                    builder = {
+                                        transformations(CircleCropTransformation())
+                                    }
+                                )
+
+                                Image(
+                                    painter = painter,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(56.dp)
+                                        .clip(CircleShape)
+                                )
+                            }
                         }
 
                         Column(
@@ -134,7 +163,7 @@ fun AddScreen(
                         navController.navigate(Screens.AddScreenChild.route)
                     },
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(16.dp, 16.dp, 16.dp, 50.dp)
                         .size(56.dp)
                 ) {
                     Icon(

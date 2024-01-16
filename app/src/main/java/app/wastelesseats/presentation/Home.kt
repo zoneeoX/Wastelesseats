@@ -3,6 +3,7 @@ package app.wastelesseats.presentation
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 
 import androidx.compose.foundation.background
@@ -27,14 +28,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import app.wastelesseats.R
 import app.wastelesseats.nav.Screens
 import app.wastelesseats.nav.categoryItemsScreenRoute
 import app.wastelesseats.util.MarkerData
 import app.wastelesseats.util.SharedViewModel
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.StateFlow
 import java.text.SimpleDateFormat
@@ -44,14 +52,14 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 
 
-data class Category(val name: String)
+data class Category(val name: String, val imageResource: Int)
 
 val categories = listOf(
-    Category("Food"),
-    Category("Beverages"),
-    Category("Vegetable"),
-    Category("Electronics"),
-    Category("Other")
+    Category("Food", R.drawable.food),
+    Category("Beverages", R.drawable.beverage),
+    Category("Vegetable", R.drawable.vegetable),
+    Category("Electronics", R.drawable.electronics),
+    Category("Other", R.drawable.others)
 )
 
 
@@ -71,13 +79,6 @@ fun calculateDaysRemaining(expirationDate: String): Int {
     return 0
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun formatTimestamp(timestamp: Timestamp): String {
-    val instant = Instant.ofEpochSecond(timestamp.seconds, timestamp.nanoseconds.toLong())
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        .withZone(ZoneId.systemDefault())
-    return formatter.format(instant)
-}
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RecentItem(
@@ -99,36 +100,96 @@ fun RecentItem(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
-                .background(color = Color.Gray, shape = RoundedCornerShape(16.dp))
+                .height(80.dp)
+                .background(color = Color.White, shape = RoundedCornerShape(5.dp))
                 .padding(16.dp)
+
         ) {
             Column {
-                Row(){
-                    Text(
-                        text = markerData.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.White,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                    Text(text = " | ", color = Color.White,style = MaterialTheme.typography.titleMedium,)
-                    Text(
-                        text = markerData.category,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.White,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                }
-
-                Text(
-                    text = markerData.description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.White
-                )
-                val expirationDate = markerData.expired ?: ""
+                val expirationDate = markerData.expired
                 val daysRemaining = calculateDaysRemaining(expirationDate)
 
-                Text(
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(color = Color.Gray, shape = CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        markerData.imageUrl.let { imageUrl ->
+                            val painter = rememberImagePainter(
+                                data = imageUrl,
+                                builder = {
+                                    transformations(CircleCropTransformation())
+                                }
+                            )
+
+                            Image(
+                                painter = painter,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clip(CircleShape)
+                            )
+                        }
+                    }
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .padding(start = 8.dp)
+                        ,
+                        horizontalAlignment = Alignment.Start
+                    ) {
+
+                        Text(
+                            text = markerData.title,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Color.Black,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                        Text(
+                            text = markerData.category,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.End
+                    ) {
+
+
+                            Text(
+                                text = if(markerData.price > 0)"Rp. ${markerData.price}" else "Free",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = Color.Black,
+                                modifier = Modifier.padding(bottom = 4.dp)
+                            )
+
+                        Text(
+                            text = if (daysRemaining > 0) {
+                                "$daysRemaining days left before expired"
+                            } else {
+                                "Expired"
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (daysRemaining > 0) Color.Gray else Color.Red
+                        )
+                    }
+                }
+
+                /*Text(
                     text = if (daysRemaining > 0) {
                         "$daysRemaining days left before expired"
                     } else {
@@ -136,7 +197,7 @@ fun RecentItem(
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = if (daysRemaining > 0) Color.White else Color.Red
-                )
+                )*/
             }
         }
     }
@@ -158,14 +219,18 @@ fun Home(
 
 
 
-
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(250,250,250))
+    ){
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(16.dp, 16.dp, 16.dp, 50.dp)
             .verticalScroll(rememberScrollState())
+
     ) {
         Row(
             modifier = Modifier
@@ -221,8 +286,16 @@ fun Home(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp) // Adjust the height as needed
-                .background(color = Color.Gray, shape = RoundedCornerShape(16.dp))
+                .height(200.dp)
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            Color(0xFF8BC34A),
+                            Color(0xFF4CAF50)
+                        )
+                    ),
+                    shape = RoundedCornerShape(16.dp)
+                )
                 .padding(20.dp)
         ) {
             Column {
@@ -245,7 +318,7 @@ fun Home(
                     modifier = Modifier.padding(bottom = 15.dp)
                 )
                 Button(
-                    onClick = { /* Handle order button click */ },
+                    onClick = { /*  */ },
                     modifier = Modifier
                         .wrapContentWidth()
                         .height(40.dp),
@@ -261,8 +334,10 @@ fun Home(
         }
         Text(
             text = "Categories",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(bottom = 8.dp)
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.Gray,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 10.dp)
         )
         LazyRow {
             items(categories) { category ->
@@ -274,8 +349,10 @@ fun Home(
 
         Text(
             text = "Map View",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.Gray,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 10.dp)
         )
 
         Button(
@@ -286,7 +363,7 @@ fun Home(
                 .fillMaxWidth()
                 .height(60.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0CBC8B)
+                containerColor = Color(139, 92, 246)
             )
         ) {
             Row(
@@ -300,9 +377,11 @@ fun Home(
             }
         }
         Text(
-            text = "Recent Added Items",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            text = "Recent Items",
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.Gray,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 10.dp)
         )
 
         if (recentItems.isEmpty()) {
@@ -321,6 +400,7 @@ fun Home(
             }
         }
     }
+    }
 }
 
 @Composable
@@ -329,7 +409,7 @@ fun CategoryItem(category: Category, onClick: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(8.dp)
-            .clickable {onClick()}
+            .clickable { onClick() }
     ) {
         Box(
             modifier = Modifier
@@ -337,7 +417,13 @@ fun CategoryItem(category: Category, onClick: () -> Unit) {
                 .background(color = Color(0xFF66BB6A), shape = CircleShape)
                 .clip(CircleShape)
         ) {
-            // Temporary circle icon
+            Image(
+                painter = painterResource(id = category.imageResource),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(CircleShape)
+            )
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = category.name, style = MaterialTheme.typography.bodySmall)

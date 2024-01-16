@@ -3,7 +3,16 @@ package app.wastelesseats.presentation
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
+import android.util.Base64
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -22,6 +32,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -46,6 +57,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -63,9 +77,14 @@ import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+
+
+
 
 
 @SuppressLint("SimpleDateFormat")
@@ -76,12 +95,12 @@ fun AddScreenChild(
     sharedViewModel: SharedViewModel,
     viewModel: MapsViewModel = viewModel(),
 ) {
-    var title: String by remember { mutableStateOf("")}
-    var lat: Double by remember { mutableStateOf(0.0)}
-    var lng: Double by remember { mutableStateOf(0.0)}
-    var description: String by remember { mutableStateOf("")}
-    var userId: String by remember { mutableStateOf("")}
-    var price: Int by remember { mutableStateOf(0)}
+    var title: String by remember { mutableStateOf("") }
+    var lat: Double by remember { mutableStateOf(0.0) }
+    var lng: Double by remember { mutableStateOf(0.0) }
+    var description: String by remember { mutableStateOf("") }
+    var userId: String by remember { mutableStateOf("") }
+    var price: Int by remember { mutableStateOf(0) }
     var categorys: String by remember { mutableStateOf("") }
     val selectedDateState = rememberDatePickerState(Calendar.getInstance().timeInMillis)
 
@@ -97,8 +116,6 @@ fun AddScreenChild(
 
     val confirmEnabled by remember {
         derivedStateOf {
-            // Add your validation logic here if needed
-            // For example, you can check if the selected date is not null
             true
         }
     }
@@ -120,7 +137,17 @@ fun AddScreenChild(
     }
 
 
+    var capturedImage: ImageBitmap? by remember { mutableStateOf(null) }
 
+    val takePictureLauncher: ActivityResultLauncher<Void?> =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { result ->
+            if (result != null) {
+                capturedImage = result.asImageBitmap()
+            }
+        }
+
+    val storage = FirebaseStorage.getInstance()
+    val storageRef = storage.reference
 
 
 
@@ -152,6 +179,7 @@ fun AddScreenChild(
             Box(Modifier.size(48.dp))
         }
 
+
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -160,7 +188,7 @@ fun AddScreenChild(
             verticalArrangement = Arrangement.Top
         ) {
 
-            val itemCategories = listOf("Food", "Beverages", "Vegetables", "Electronics", "Others")
+            val itemCategories = listOf("","Food", "Beverages", "Vegetables", "Electronics", "Others")
             var selectedCategoryIndex by remember { mutableStateOf(0) }
             var openDropdown by remember { mutableStateOf(false) }
 
@@ -297,10 +325,24 @@ fun AddScreenChild(
                 onValueChange = { description = it },
                 label = { Text(text = "Item Description") },
                 placeholder = { Text(text = "Item Description") },
-                maxLines = 8, // Increased number of lines
+                maxLines = 8,
                 singleLine = false,
             )
-
+            Button(
+                onClick = {
+                    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    takePictureLauncher.launch(null)
+                },
+                modifier = Modifier
+                    .size(48.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.PhotoCamera,
+                    contentDescription = "Camera Icon",
+                    modifier = Modifier
+                        .size(48.dp)
+                )
+            }
 
 
             Button(
@@ -317,25 +359,46 @@ fun AddScreenChild(
                                 lng = userLng
                                 val fireStoreRef = Firebase.firestore
 
-                                val selectedDateMillis = selectedDateState.selectedDateMillis
+                                capturedImage?.let { imageBitmap ->
+                                    val baos = ByteArrayOutputStream()
+                                    imageBitmap.asAndroidBitmap().compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                                    val data = baos.toByteArray()
+                                    val imageRef = storageRef.child("images/${fireStoreRef.collection("markers").document().id}.jpg")
 
-                                val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-                                val formattedDate = dateFormat.format(selectedDateMillis)
+                                    val uploadTask = imageRef.putBytes(data)
+                                    uploadTask.addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            imageRef.downloadUrl.addOnCompleteListener { urlTask ->
+                                                if (urlTask.isSuccessful) {
+                                                    val imageUrl = urlTask.result.toString()
 
+                                                    val selectedDateMillis = selectedDateState.selectedDateMillis
+                                                    val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                                                    val formattedDate = dateFormat.format(selectedDateMillis)
 
-                                val markerData = MarkerData(
-                                    id = fireStoreRef.collection("markers").document().id,
-                                    userId = userId,
-                                    title = title,
-                                    expired = formattedDate,
-                                    lat = lat,
-                                    lng = lng,
-                                    description = description,
-                                    price = price,
-                                    timestamp = Timestamp.now(),
-                                    category = categorys
-                                )
-                                sharedViewModel.saveData(userData = markerData, context = context)
+                                                    val markerData = MarkerData(
+                                                        id = fireStoreRef.collection("markers").document().id,
+                                                        userId = userId,
+                                                        title = title,
+                                                        expired = formattedDate,
+                                                        lat = lat,
+                                                        lng = lng,
+                                                        description = description,
+                                                        price = price,
+                                                        timestamp = Timestamp.now(),
+                                                        category = categorys,
+                                                        imageUrl = imageUrl
+                                                    )
+                                                    sharedViewModel.saveData(userData = markerData, context = context)
+                                                } else {
+                                                    // test
+                                                }
+                                            }
+                                        } else {
+                                            // test
+                                        }
+                                    }
+                                }
                             }
                         }.addOnFailureListener { /* test */ }
                     } catch (e: SecurityException) {
@@ -344,7 +407,6 @@ fun AddScreenChild(
                         // testing
                     }
                     navController.navigate(Screens.AddScreen.route)
-
                 }
             ) {
                 Text(text = "Add Product")
@@ -352,5 +414,4 @@ fun AddScreenChild(
         }
     }
 }
-
 

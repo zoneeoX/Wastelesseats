@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import androidx.compose.runtime.Composable
 
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import app.wastelesseats.nav.Screens
@@ -60,14 +61,21 @@ fun NotificationScreen(navController: NavController, sharedViewModel: SharedView
 
 
     Scaffold(
+        modifier = Modifier,
+        containerColor = Color(250,250,250),
         topBar = {
             TopAppBar(
-                title = { Text("Notifications") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigate(Screens.MapScreen.route) }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-                    }
-                }
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(250,250,250)
+                ),
+                title = { Text(
+                    text = "Notifications",
+                    modifier = Modifier
+                        .padding(0.dp),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Gray,
+                    style = MaterialTheme.typography.headlineMedium,
+                    ) },
             )
         },
         content = {
@@ -115,18 +123,21 @@ fun NotificationItem(marker: MarkerData, sharedViewModel: SharedViewModel, onUpd
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Text(text = marker.title ?: "", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = marker.description ?: "")
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Price: ${marker.price}")
+            Row {
+                Text(text = marker.title ?: "", fontWeight = FontWeight.Bold)
+                Text(text = if(marker.price > 0)" (Rp. ${marker.price})" else " (Free)")
+            }
+            Text(text = marker.category ?: "")
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(
@@ -139,13 +150,13 @@ fun NotificationItem(marker: MarkerData, sharedViewModel: SharedViewModel, onUpd
                             color = if (marker.status == "Pending") Color.Gray else Color.Red,
                             shape = RoundedCornerShape(percent = 50)
                         )
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
                 ) {
                     Text(
                         text = if (marker.status == "Pending") "Pending" else "Sold",
                         color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
+                        style = MaterialTheme.typography.bodySmall,
+                        )
                 }
 
                 if (marker.status == "Pending") {

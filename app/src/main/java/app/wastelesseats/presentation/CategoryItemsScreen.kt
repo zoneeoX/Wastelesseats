@@ -1,7 +1,13 @@
 package app.wastelesseats.presentation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,12 +25,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import app.wastelesseats.util.MarkerData
 import app.wastelesseats.util.SharedViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CategoryItemsScreen(
     navController: NavController,
@@ -39,7 +48,10 @@ fun CategoryItemsScreen(
     val categoryItems = categoryItemsState ?: emptyList()
 
 
-    Column {
+    Column(
+        Modifier.
+        background(color = Color(250,250,250))
+    ) {
         Text(
             text = category, modifier = Modifier
                 .padding(20.dp)
@@ -61,6 +73,104 @@ fun CategoryItemsScreen(
 
 }
 
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun CategoryItem(
+    item: MarkerData,
+    onItemClick: () -> Unit,
+) {
+    val darkerGreen = Color(0xFF0CBC8B)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable(onClick = onItemClick),
+
+        ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .background(color = Color.White, shape = RoundedCornerShape(5.dp))
+                .padding(16.dp)
+
+        ) {
+            Column {
+                val expirationDate = item.expired
+                val daysRemaining = calculateDaysRemaining(expirationDate)
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Text(
+                            text = item.title,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Color.Black,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                        Text(
+                            text = item.category,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.End
+                    ) {
+
+
+                        Text(
+                            text = if(item.price > 0)"Rp. ${item.price}" else "Free",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Color.Black,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+
+                        Text(
+                            text = if (daysRemaining > 0) {
+                                "$daysRemaining days left before expired"
+                            } else {
+                                "Expired"
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (daysRemaining > 0) Color.Gray else Color.Red
+                        )
+
+                    }
+                }
+
+                /*Text(
+                    text = if (daysRemaining > 0) {
+                        "$daysRemaining days left before expired"
+                    } else {
+                        "Expired"
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (daysRemaining > 0) Color.White else Color.Red
+                )*/
+            }
+        }
+    }
+}
+
+
+/*
 @Composable
 fun CategoryItem(item: MarkerData, onItemClick: () -> Unit) {
     Card(
@@ -85,3 +195,4 @@ fun CategoryItem(item: MarkerData, onItemClick: () -> Unit) {
         }
     }
 }
+*/

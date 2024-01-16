@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
+import app.wastelesseats.R
 import app.wastelesseats.nav.Screens
 import kotlinx.coroutines.launch
 
@@ -48,6 +49,7 @@ fun LoginScreen(
 
     val textFieldShape = RoundedCornerShape(8.dp)
     val darkerGreen = Color(0xFF0CBC8B)
+    val loginImage = R.drawable.login
 
 
     val lightTextColor = Color.Black
@@ -70,21 +72,32 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
+            Column(
+                modifier = Modifier,
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Image(
+                    painter = painterResource(id = loginImage),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(300.dp)
+                        .padding(start = 20.dp)
+                )
+                Text("Login", fontSize = 35.sp, color = textColor, fontWeight = FontWeight.Bold, modifier = Modifier
+                    .padding(bottom = 20.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Image(
-                painter = painterResource(id =  Login.jpg),
-                contentDescription = null, // Add a meaningful description
-                modifier = Modifier
-                    .size(64.dp)
-                    .padding(bottom = 16.dp)
-            )
+            }
 
-            Text("Login", fontSize = 20.sp, color = textColor, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(8.dp))
+
+
+
+
 
             Text("Enter your email and password to login", color = textColor)
             Spacer(modifier = Modifier.height(16.dp))

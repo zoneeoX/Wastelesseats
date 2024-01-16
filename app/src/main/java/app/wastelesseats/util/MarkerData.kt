@@ -18,5 +18,6 @@ data class MarkerData(
     val status: String = "Available",
     val timestamp: Timestamp? = null,
     val category: String = "",
+    val imageUrl: String = "",
 
 )

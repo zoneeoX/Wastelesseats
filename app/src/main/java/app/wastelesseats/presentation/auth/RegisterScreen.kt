@@ -1,7 +1,9 @@
 package app.wastelesseats.presentation.auth
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -11,10 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import app.wastelesseats.R
 import app.wastelesseats.nav.Screens
 import kotlinx.coroutines.launch
 
@@ -29,7 +34,13 @@ fun RegisterScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val darkerGreen = Color(0xFF0CBC8B)
+    val registerImage = R.drawable.register
+    val lightTextColor = Color.Black
+    val darkTextColor = Color.White
+    val isDarkTheme = isSystemInDarkTheme()
 
+    val textColor = if (isDarkTheme) darkTextColor else lightTextColor
+    val backgroundColor = if (isDarkTheme) Color(30, 41, 59) else Color.White
 
     val textFieldShape = RoundedCornerShape(8.dp)
 
@@ -37,14 +48,26 @@ fun RegisterScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Wastelesseats App", fontSize = 24.sp)
-        Spacer(modifier = Modifier.height(16.dp))
+        Column(
+            modifier = Modifier,
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Image(
+                painter = painterResource(id = registerImage),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(300.dp)
+                    .padding(start = 20.dp)
+            )
+            Text("Register", fontSize = 35.sp, color = textColor, fontWeight = FontWeight.Bold, modifier = Modifier
+                .padding(bottom = 20.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Text("Register", fontSize = 20.sp)
-        Spacer(modifier = Modifier.height(8.dp))
+        }
 
         Text("Please fill in the details to register")
         Spacer(modifier = Modifier.height(16.dp))

@@ -27,6 +27,8 @@ import app.wastelesseats.ui.theme.WastelesseatsTheme
 import app.wastelesseats.util.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import android.Manifest
+import android.os.Build
+import androidx.annotation.RequiresApi
 import app.wastelesseats.nav.NavGraphWithBottomBar
 
 
@@ -37,6 +39,7 @@ class MainActivity : ComponentActivity() {
     private val sharedViewModel: SharedViewModel by viewModels()
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

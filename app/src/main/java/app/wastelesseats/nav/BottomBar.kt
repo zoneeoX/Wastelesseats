@@ -64,21 +64,27 @@ fun RowScope.AddItem(
     currentDestination: NavDestination?,
     navController: NavController
 ) {
+    val isSelected = currentDestination?.hierarchy?.any {
+        it.route == screen.route
+    } == true
+
     BottomNavigationItem(
         label = {
-            Text(text = screen.title)
+            Text(
+                text = screen.title,
+                color = if (isSelected) Color(0xFF00BFA5) else Color.Gray
+            )
         },
         icon = {
             screen.icon?.let {
                 Icon(
                     imageVector = it,
-                    contentDescription = "Navigation Icon"
+                    contentDescription = "Navigation Icon",
+                    tint = if (isSelected) Color.Gray else Color(0xFF00BFA5)
                 )
             }
         },
-        selected = currentDestination?.hierarchy?.any {
-            it.route == screen.route
-        } == true,
+        selected = isSelected,
         unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
         onClick = {
             navController.navigate(screen.route) {
