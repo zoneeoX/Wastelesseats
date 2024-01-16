@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.widget.Toast
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -54,11 +53,7 @@ import com.google.maps.android.compose.Marker
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -68,13 +63,13 @@ import app.wastelesseats.R
 import app.wastelesseats.util.SharedViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.firebase.auth.FirebaseAuth
-import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.rememberCameraPositionState
+import java.text.SimpleDateFormat
+import java.util.Date
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,6 +81,22 @@ fun MarkerInfoBox(
     onBuyClick: (MarkerData) -> Unit
 ) {
     val darkerGreen = Color(0xFF0CBC8B)
+
+    @SuppressLint("SimpleDateFormat")
+    fun calculateDaysRemaining(expirationDate: String): Int {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val currentDate = Date()
+
+        try {
+            val expiredDate = dateFormat.parse(expirationDate)
+            val difference = expiredDate!!.time - currentDate.time
+            return (difference / (1000 * 60 * 60 * 24)).toInt()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return 0
+    }
 
 
     ModalBottomSheet(
@@ -138,6 +149,24 @@ fun MarkerInfoBox(
             }
 
             Spacer(modifier = Modifier.height(8.dp))
+            val expirationDate = markerData.expired ?: ""
+            val daysRemaining = calculateDaysRemaining(expirationDate)
+
+            Text(
+                text = if (daysRemaining > 0) {
+                    "$daysRemaining days left before expired"
+                } else {
+                    "Expired"
+                },
+                color = if(daysRemaining > 0){
+                                             Color.Black
+                                             } else {
+                                                    Color.Red
+                                                    },
+                fontSize = 25.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
 
             Text(
                 text = markerData.description ?: "",

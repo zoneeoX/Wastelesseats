@@ -1,6 +1,7 @@
 package app.wastelesseats.presentation.auth
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,6 +28,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.wastelesseats.nav.Screens
 import kotlinx.coroutines.launch
@@ -70,10 +73,17 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text("Wastelesseats App", fontSize = 24.sp, color = textColor)
-            Spacer(modifier = Modifier.height(16.dp))
 
-            Text("Login", fontSize = 20.sp, color = textColor)
+
+            Image(
+                painter = painterResource(id =  Login.jpg),
+                contentDescription = null, // Add a meaningful description
+                modifier = Modifier
+                    .size(64.dp)
+                    .padding(bottom = 16.dp)
+            )
+
+            Text("Login", fontSize = 20.sp, color = textColor, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
 
             Text("Enter your email and password to login", color = textColor)
@@ -131,7 +141,7 @@ fun LoginScreen(
             if(state.value?.isSuccess?.isNotEmpty() == true){
                 val success = state.value?.isSuccess
                 Toast.makeText(context, "$success", Toast.LENGTH_LONG).show()
-                navController.navigate(Screens.MapScreen.route)
+                navController.navigate(Screens.Home.route)
 
             }
 

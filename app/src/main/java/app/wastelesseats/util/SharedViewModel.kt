@@ -21,6 +21,40 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class SharedViewModel(): ViewModel() {
+    private val _recentlyAddedItems = MutableStateFlow<List<MarkerData>>(emptyList())
+    val recentlyAddedItems: StateFlow<List<MarkerData>> = _recentlyAddedItems
+    private val _categoryItems = MutableStateFlow<List<MarkerData>>(emptyList())
+    val categoryItems: StateFlow<List<MarkerData>> = _categoryItems
+
+    fun getMarkersByCategory(category: String) {
+        val query = Firebase.firestore
+            .collection("markers")
+            .whereEqualTo("category", category)
+
+        getMarkers(query) { markerDataList ->
+            viewModelScope.launch {
+                _categoryItems.value = markerDataList
+            }
+        }
+    }
+
+    fun getItemById(itemId: String, onDataReceived: (MarkerData?) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val documentSnapshot = Firebase.firestore
+                    .collection("markers")
+                    .document(itemId)
+                    .get()
+                    .await()
+
+                val markerData = documentSnapshot.toObject(MarkerData::class.java)
+                onDataReceived(markerData)
+            } catch (e: Exception) {
+                onDataReceived(null)
+                // Handle exceptions if needed
+            }
+        }
+    }
 
     fun saveData(
         userData: MarkerData,
@@ -96,7 +130,6 @@ class SharedViewModel(): ViewModel() {
             .document(itemId)
 
         try {
-            // Update the status to "Pending"
             fireStoreRef.delete()
                 .addOnSuccessListener {
                     //
@@ -109,6 +142,8 @@ class SharedViewModel(): ViewModel() {
         }
     }
 
+
+
     fun getMarkers(query: Query, onDataReceived: (List<MarkerData>) -> Unit) {
         query.get()
             .addOnSuccessListener { querySnapshot ->
@@ -119,6 +154,24 @@ class SharedViewModel(): ViewModel() {
                 // Handle failure TODO later
             }
     }
+
+
+    fun getRecentlyAddedItems() {
+        val query = Firebase.firestore
+            .collection("markers")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .limit(5)
+
+        getMarkers(query) { markerDataList ->
+            viewModelScope.launch {
+                _recentlyAddedItems.value = markerDataList
+            }
+        }
+    }
+
+
+
+
 
     fun initiateBuy(markerData: MarkerData, onSuccess: () -> Unit) {
         updateStatusToPending(markerData.id, onSuccess = onSuccess)
