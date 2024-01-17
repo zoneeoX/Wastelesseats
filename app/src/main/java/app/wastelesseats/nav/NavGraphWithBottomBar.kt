@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -33,7 +34,7 @@ import app.wastelesseats.presentation.auth.RegisterScreen
 import app.wastelesseats.util.MarkerData
 import app.wastelesseats.util.SharedViewModel
 @Composable
-fun BuyScreenContent(itemId: String?) {
+fun BuyScreenContent(itemId: String?, navController: NavController) {
     val sharedViewModel: SharedViewModel = viewModel()
     val itemState = remember(itemId) { mutableStateOf<MarkerData?>(null) }
 
@@ -42,15 +43,15 @@ fun BuyScreenContent(itemId: String?) {
             result?.let {
                 itemState.value = it
             } ?: run {
-                // Handle the case where the item is not found
+                //
             }
         }
     }
 
     itemState.value?.let {
-        BuyScreen(item = it, onBuyClick = {}, onClose = {})
+        BuyScreen(item = it, onBuyClick = {}, onClose = {}, sharedViewModel = sharedViewModel, navController = navController)
     } ?: run {
-        // Handle the case where the item is not found
+        //
     }
 }
 @RequiresApi(Build.VERSION_CODES.O)
@@ -102,7 +103,7 @@ fun NavGraphWithBottomBar(
 
                 val itemState = rememberUpdatedState(itemId)
 
-                BuyScreenContent(itemId = itemState.value)
+                BuyScreenContent(itemId = itemState.value, navController = navController)
             }
 
 

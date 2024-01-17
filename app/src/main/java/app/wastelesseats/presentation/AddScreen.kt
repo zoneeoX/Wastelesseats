@@ -39,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -108,8 +109,9 @@ fun AddScreen(
                 userUploadedItems.forEach { item ->
                     Row(
                         modifier = Modifier
-                            .padding(vertical = 8.dp)
                             .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .shadow(4.dp, shape = RoundedCornerShape(5.dp))
                             .background(
                                 color = Color.White,
                                 shape = RoundedCornerShape(8.dp)

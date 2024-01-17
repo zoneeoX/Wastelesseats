@@ -1,6 +1,7 @@
 package app.wastelesseats.presentation
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,14 +24,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import app.wastelesseats.nav.Screens
 import app.wastelesseats.util.MarkerData
+import app.wastelesseats.util.SharedViewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -36,9 +45,15 @@ import java.util.Date
 fun BuyScreen(
     item: MarkerData,
     onBuyClick: (MarkerData) -> Unit,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    sharedViewModel: SharedViewModel,
+    navController: NavController,
 ) {
     val darkerGreen = Color(0xFF0CBC8B)
+    val auth = FirebaseAuth.getInstance()
+    val user = auth.currentUser?.uid
+    val isCurrentUserItem = user == item.userId
+    val context = LocalContext.current
 
     @SuppressLint("SimpleDateFormat")
     fun calculateDaysRemaining(expirationDate: String): Int {
@@ -56,6 +71,16 @@ fun BuyScreen(
         return 0
     }
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                color = Color(250,250,250)
+            )
+    ) {
+
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -64,8 +89,12 @@ fun BuyScreen(
     ) {
         Box(
             modifier = Modifier
-                .size(160.dp)
-                .background(color = Color.Gray, shape = CircleShape),
+                .size(280.dp)
+                .background(color = Color.Gray, shape = CircleShape)
+                .shadow(
+                    elevation = 16.dp,
+                    shape = CircleShape
+                ),
             contentAlignment = Alignment.Center
         ) {
             item.imageUrl.let { imageUrl ->
@@ -80,7 +109,7 @@ fun BuyScreen(
                     painter = painter,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(160.dp)
+                        .size(280.dp)
                         .clip(CircleShape)
                 )
             }
@@ -99,7 +128,7 @@ fun BuyScreen(
         Text(
             text = if (item.price == 0) "Free" else "Rp. ${item.price}",
             color = if (item.price == 0) Color.Gray else darkerGreen,
-            fontSize = 16.sp,
+            fontSize = 20.sp,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -108,20 +137,40 @@ fun BuyScreen(
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                text = "Item Details",
+                text = "Item Description",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 modifier = Modifier.weight(1f)
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
         val expirationDate = item.expired ?: ""
         val daysRemaining = calculateDaysRemaining(expirationDate)
 
+
+
+
+            Text(
+                text = item.description ?: "",
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = "Item Date",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                modifier = Modifier.weight(1f)
+            )
+        }
         Text(
             text = if (daysRemaining > 0) {
-                "$daysRemaining days left before expired"
+                "$daysRemaining days left before expired (${item.expired})"
             } else {
                 "Expired"
             },
@@ -130,41 +179,87 @@ fun BuyScreen(
             } else {
                 Color.Red
             },
-            fontSize = 25.sp,
-            textAlign = TextAlign.Center,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
 
-        Text(
-            text = item.description ?: "",
-            fontSize = 14.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
+        if (isCurrentUserItem) {
+            Button(
+                onClick = {
+                    if (item.status == "Available") {
+                        sharedViewModel.initiateBuy(
+                            item,
+                            onSuccess = {
+                                Toast.makeText(context, "Buy initiated successfully", Toast.LENGTH_SHORT).show()
+                                navController.navigate(Screens.Home.route)
+                            })
+                    } else {
+                        Toast.makeText(context, "Buy initiated failed", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                enabled = false,
 
-        Button(
-            onClick = {
-                onBuyClick.invoke(item)
-            },
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .fillMaxWidth()
-                .height(50.dp)
-                .background(
-                    color = darkerGreen,
-                    shape = RoundedCornerShape(12.dp)
-                ),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = darkerGreen,
-                contentColor = Color.White
-            )
-        ) {
-            Text(
-                text = "Buy",
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .background(
+                        color = if (item.status == "Available") darkerGreen else Color.Gray,
+                        shape = RoundedCornerShape(percent = 50)
+                    ),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (item.status == "Available") darkerGreen else Color.Gray,
+                    contentColor = Color.White
+                )
+            ) {
+                Text(
+                    text = "This item is yours",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                )
+            }
+        } else {
+            Button(
+                onClick = {
+                    if (item.status == "Available") {
+                        sharedViewModel.initiateBuy(
+                            item,
+                            onSuccess = {
+                                Toast.makeText(context, "Buy initiated successfully", Toast.LENGTH_SHORT).show()
+                                navController.navigate(Screens.Home.route)
+                            })
+                    } else {
+                      Toast.makeText(context, "Buy initiated failed", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                enabled = item.status == "Available",
+
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .background(
+                        color = if (item.status == "Available") darkerGreen else Color.Gray,
+                        shape = RoundedCornerShape(percent = 50)
+                    ),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (item.status == "Available") darkerGreen else Color.Gray,
+                    contentColor = Color.White
+                )
+            ) {
+                Text(
+                    text = when (item.status) {
+                        "Available" -> "Buy"
+                        "Pending" -> "Item Is Pending"
+                        else -> "Item Sold"
+                    },
+                    color = Color.White,
+                    fontSize = 20.sp,
+                )
+            }
         }
     }
+    }
+
 }

@@ -2,6 +2,7 @@ package app.wastelesseats.presentation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,8 +14,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
@@ -27,11 +30,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import app.wastelesseats.util.MarkerData
 import app.wastelesseats.util.SharedViewModel
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -85,6 +92,7 @@ fun CategoryItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .shadow(4.dp, shape = RoundedCornerShape(5.dp))
             .clickable(onClick = onItemClick),
 
         ) {
@@ -107,25 +115,52 @@ fun CategoryItem(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(
+                    Box(
                         modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.Start
+                            .size(40.dp)
+                            .background(color = Color.Gray, shape = CircleShape),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = item.title,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = Color.Black,
-                            modifier = Modifier.padding(bottom = 4.dp)
-                        )
-                        Text(
-                            text = item.category,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = Color.Gray,
-                            modifier = Modifier.padding(bottom = 4.dp)
-                        )
+                        item.imageUrl.let { imageUrl ->
+                            val painter = rememberImagePainter(
+                                data = imageUrl,
+                                builder = {
+                                    transformations(CircleCropTransformation())
+                                }
+                            )
+
+                            Image(
+                                painter = painter,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clip(CircleShape)
+                            )
+                        }
                     }
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth()
+                                .padding(start = 8.dp)
+                            ,
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            Text(
+                                text = item.title,
+                                style = MaterialTheme.typography.titleSmall,
+                                color = Color.Black,
+                                modifier = Modifier.padding(bottom = 4.dp)
+                            )
+                            Text(
+                                text = item.category,
+                                style = MaterialTheme.typography.titleSmall,
+                                color = Color.Gray,
+                                modifier = Modifier.padding(bottom = 4.dp)
+                            )
+                        }
+
+
 
                     Column(
                         modifier = Modifier
@@ -144,7 +179,7 @@ fun CategoryItem(
 
                         Text(
                             text = if (daysRemaining > 0) {
-                                "$daysRemaining days left before expired"
+                                "$daysRemaining days before expired"
                             } else {
                                 "Expired"
                             },

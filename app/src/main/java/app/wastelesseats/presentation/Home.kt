@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -57,9 +58,9 @@ data class Category(val name: String, val imageResource: Int)
 val categories = listOf(
     Category("Food", R.drawable.food),
     Category("Beverages", R.drawable.beverage),
-    Category("Vegetable", R.drawable.vegetable),
+    Category("Vegetables", R.drawable.vegetable),
     Category("Electronics", R.drawable.electronics),
-    Category("Other", R.drawable.others)
+    Category("Others", R.drawable.others)
 )
 
 
@@ -92,8 +93,8 @@ fun RecentItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .shadow(4.dp, shape = RoundedCornerShape(5.dp))
             .clickable {
-                // Navigate to BuyScreen when clicked
                 onClickBuy(markerData.id)
             }
     ) {
@@ -179,7 +180,7 @@ fun RecentItem(
 
                         Text(
                             text = if (daysRemaining > 0) {
-                                "$daysRemaining days left before expired"
+                                "$daysRemaining days before expired"
                             } else {
                                 "Expired"
                             },
@@ -259,7 +260,7 @@ fun Home(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
-                .clip(RoundedCornerShape(16.dp)) // Rounded corners
+                .clip(RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colorScheme.surface)
                 .border(
                     1.dp,
@@ -422,7 +423,8 @@ fun CategoryItem(category: Category, onClick: () -> Unit) {
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(CircleShape)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
             )
         }
         Spacer(modifier = Modifier.height(8.dp))

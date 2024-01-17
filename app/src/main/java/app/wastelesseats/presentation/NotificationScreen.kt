@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import androidx.compose.runtime.Composable
 
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -118,12 +119,11 @@ fun NotificationScreen(navController: NavController, sharedViewModel: SharedView
 @Composable
 fun NotificationItem(marker: MarkerData, sharedViewModel: SharedViewModel, onUpdate: () -> Unit) {
     val darkerGreen = Color(0xFF0CBC8B)
-
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .shadow(4.dp, shape = RoundedCornerShape(8.dp)),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
