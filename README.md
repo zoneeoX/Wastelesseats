@@ -76,28 +76,35 @@ Navigate to the project directory, open it in Android Studio, and wait for the b
 
 1. **Login and Register**
    <p align="center">
-     <img width="250" alt="trashify" src="![Login](https://github.com/zoneeoX/Wastelesseats/assets/26033026/d1c8ee4d-6609-4f1e-b360-9e237844c5f0)">  
-     <img width="250" alt="trashify" src="![Register](https://github.com/zoneeoX/Wastelesseats/assets/26033026/f7c6792f-3723-4643-be2f-9c19511e4030)">
+     <img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/d1c8ee4d-6609-4f1e-b360-9e237844c5f0">  
+     <img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/f7c6792f-3723-4643-be2f-9c19511e4030">
 
    </p><br>
 
 2. **Home Page**
-   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/7d4f87f0-30eb-4d67-b043-3dbb95a2217d"></p><br>
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/078f7253-0fe7-457a-b27b-c3e268e58410"></p><br>
 
 3. **Map Page*
-   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/4fc28131-0c3a-479e-b575-488ec80a36e0"></p><br>
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/9e667488-4e45-4557-8ff0-1881b545b13a"></p><br>
 
-4. **Post Page**
-   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/701b5faf-1054-47ea-ba99-12100bf20536"></p><br>
+4. **Your item and Post page**
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/e21429a3-6404-4887-8012-6b646b670a08"></p><br>
+   <p align="center"><img width="250" alt="wastelesseats" src="   https://github.com/zoneeoX/Wastelesseats/assets/26033026/065a762f-a3a7-4038-9229-44da69d806a3"></p><br>
 
-5. **Details Post**
-   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/f4f6b079-4700-4282-a555-a7d590f62241"></p><br>
+5. **Details Post Page**
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/25638732-057d-4a01-83b9-8eaa18455339"></p><br>
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/284bb2c9-55b5-43eb-8bbc-bddd0258dce9"></p><br>
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/f7cdb9c4-ec17-4533-a869-17bf55efd0f0"></p><br>
 
 6. **Notifications Page**
-   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/1b34e323-be47-4cb5-89de-257a63c6920e"></p><br>
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/8fbae71b-3fbe-4b9f-8d79-0d717ea1f3ba"></p><br>
 
 7. **Profile Page**
-    <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/85dc5a48-cf45-4347-a9e4-07bee21e3160"></p><br>
+    <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/bc110b99-6704-4733-bc05-43d6e9789129"></p><br>
+
+8. **Machine Learning**
+    <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/981b4c7d-1fd7-402c-8088-8a3103f3ae28"></p><br>
+    <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/zoneeoX/Wastelesseats/assets/26033026/39548278-1a40-4ec9-a1b7-b76674793de5"></p><br>
 
 # Machine Learning Integration
 
