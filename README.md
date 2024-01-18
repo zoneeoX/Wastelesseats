@@ -54,7 +54,7 @@ By incorporating these features, Wasteless Eats revolutionizes the donation and 
 - Clone this repository using Git:
 
     ```bash
-    git clone https://github.com/your-username/wasteless-eats.git
+    git clone https://github.com/zoneeoX/Wastelesseats.git
     ```
 
   - **OR**
