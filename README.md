@@ -1,51 +1,136 @@
-Wastelesseats
+# Wasteless Eats
 
-Deskripsi Tim :
+Welcome to Wasteless Eats – an innovative solution addressing food waste and promoting sustainability.
 
-Hacker :
-Fadel Najmi Adliansyah, 
-Raja Revanery Ramadhan
+# Team Description 
 
-Hustler : 
-Muhammad Syifa Ghazaly
+Meet the dynamic minds driving Wasteless Eats to success:
 
-Hipster :
-Usamah Abdul Aziz
+👨‍💻 **Hacker Team:**
+   - Fadel Najmi Adliansyah
+   - Raja Revanery Ramadhan
 
-Fitur Didalam Aplikasi:
-Authentication, 
-Map View,
-Donate (Transcation) -> Sequence diagram from stage 1,
-Classification Food (Deteksi makanan masih layak dimakan atau tidak),
+💼 **Hustler:**
+   - Muhammad Syifa Ghazaly
+
+🎨 **Hipster:**
+   - Usamah Abdul Aziz
 
 
+## Mission
 
+Bridge the gap between surplus, imperfect food, and those who can benefit. Wasteless Eats extends beyond edibles; it's a platform for donating/selling various items, including electronics, books, and more.
 
+## Problem Statement
 
-Screenshot Aplikasi
+In a world where millions suffer from hunger, edible food is discarded due to imperfections, worsening global hunger and environmental degradation. Wasteless Eats aims to connect surplus food with those in need, reducing waste globally.
 
-![MapView](https://github.com/zoneeoX/Wastelesseats/assets/26033026/0fe6ae1a-d106-4fa3-aae9-c7fb59799640)
-![Donate Tab](https://github.com/zoneeoX/Wastelesseats/assets/26033026/2433ce18-4faa-4f81-af49-22253beb300e)
-![DonateTabChildren](https://github.com/zoneeoX/Wastelesseats/assets/26033026/b25a9351-4e70-4815-8977-99f281b96cc7)
-![Notifications](https://github.com/zoneeoX/Wastelesseats/assets/26033026/fc2e7c08-b12d-404c-acd3-3d69d99baff4)
-![MyItem](https://github.com/zoneeoX/Wastelesseats/assets/26033026/8d833a38-8440-4537-98ca-578acfd31cd9)
-![MultipleItem](https://github.com/zoneeoX/Wastelesseats/assets/26033026/e170d8cb-9336-41d4-988a-6c6f61c93eb2)
-![Buy](https://github.com/zoneeoX/Wastelesseats/assets/26033026/e27b9e36-06fa-4c5e-828b-fd5a541f043b)
-![ItemPending](https://github.com/zoneeoX/Wastelesseats/assets/26033026/973f71d8-13b8-41a3-ba88-b11a585b7d87)
-![ItemSold](https://github.com/zoneeoX/Wastelesseats/assets/26033026/f568172f-b462-4f55-aeff-3d5138ab3287)
+## Key Features
 
-Authentication Feature:
+- 🌽 **Imperfect Food Marketplace**: Browse and choose from a variety of perfectly edible but imperfect food items.
+  
+- 🔄 **Diverse Items Exchange**: Facilitate the exchange of unused items, fostering a culture of reuse.
 
-![Login](https://github.com/zoneeoX/Wastelesseats/assets/26033026/ac831200-ff86-4d3c-9b3f-70ec47f066f2)
-![Register](https://github.com/zoneeoX/Wastelesseats/assets/26033026/12bf432d-f520-496b-ae56-54801a6917b3)
+- 🌍 **Local and Global Impact**: Contribute to community and global waste reduction efforts.
 
+- 🤝 **Charitable Initiatives**: Support organizations addressing hunger and promoting sustainability.
 
-Dark Mode:
+- 🎨 **User-Friendly Interface**: An intuitive, seamless experience for both donors and recipients.
 
-![DarkMode](https://github.com/zoneeoX/Wastelesseats/assets/26033026/872e0a26-e746-48cd-919a-5e37b72fdd95)
+## Additional Features
 
-Classification Data (Deteksi makanan busuk atau makanan masih layak dikonsumsi):
+- 🔄 **Real-time Database**: Use Firebase for seamless item tracking.
 
-![Klasifikasi](https://github.com/zoneeoX/Wastelesseats/assets/26033026/b191c9a2-e992-40e3-920e-70c78f40fad1)
+- 🧠 **Rotten Food Detector**: Utilize TensorFlow for identifying and preventing the distribution of spoiled items.
 
+- 🗺️ **Location-Based Services**: Leverage Google Maps API for pinpointing item locations.
 
+By incorporating these features, Wasteless Eats revolutionizes the donation and exchange process, ensuring safety, quality, and efficient tracking of items. Join us in the fight against food waste and contribute to a more sustainable world.
+
+# Installation
+
+### 1. Clone or Download Source Code
+
+- Clone this repository using Git:
+
+    ```bash
+    git clone https://github.com/your-username/wasteless-eats.git
+    ```
+
+  - **OR**
+
+- Download the Zip file and extract it to your preferred directory (e.g., `C:\Users\Username\AndroidStudioProjects`).
+
+### 2. Wait for Build Gradle to Complete
+
+Navigate to the project directory, open it in Android Studio, and wait for the build process to complete.
+
+### 3. Congratulations! You are done installing this project. 🎉
+
+# Running the App
+
+- Connect your Android phone to your computer or launch an emulator.
+- In Android Studio, click on the "Run" button (🚀) or use the keyboard shortcut `Shift + F10` to deploy the app on your connected device.
+
+# Application Features and Appearance
+
+1. **Login and Register**
+   <p align="center">
+     <img width="250" alt="trashify" src="![Login](https://github.com/zoneeoX/Wastelesseats/assets/26033026/d1c8ee4d-6609-4f1e-b360-9e237844c5f0)">  
+     <img width="250" alt="trashify" src="![Register](https://github.com/zoneeoX/Wastelesseats/assets/26033026/f7c6792f-3723-4643-be2f-9c19511e4030)">
+
+   </p><br>
+
+2. **Home Page**
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/7d4f87f0-30eb-4d67-b043-3dbb95a2217d"></p><br>
+
+3. **Map Page*
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/4fc28131-0c3a-479e-b575-488ec80a36e0"></p><br>
+
+4. **Post Page**
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/701b5faf-1054-47ea-ba99-12100bf20536"></p><br>
+
+5. **Details Post**
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/f4f6b079-4700-4282-a555-a7d590f62241"></p><br>
+
+6. **Notifications Page**
+   <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/1b34e323-be47-4cb5-89de-257a63c6920e"></p><br>
+
+7. **Profile Page**
+    <p align="center"><img width="250" alt="wastelesseats" src="https://github.com/hefrilia/Trashify/assets/92602362/85dc5a48-cf45-4347-a9e4-07bee21e3160"></p><br>
+
+# Machine Learning Integration
+
+Wasteless Eats harnesses the power of TensorFlow, a robust open-source machine learning library, to elevate user experiences and champion sustainable practices.
+
+## Gathering Data
+
+Data collection was curated from diverse sources, ensuring a rich and varied dataset. Utilizing datasets like [Kaggle - Rotten and Fresh Food Images](https://www.kaggle.com/datasets/sriramr/fruits-fresh-and-rotten-for-classification), we create a foundation for effective machine learning.a
+
+## Classification Targets:
+
+1. 🍏 apple
+2. 🍊 orange
+3. 🍌 banana
+4. 🫑 okra
+5. 🥒 cucumber
+6. 🥔 potato
+7. 🍅 tomato
+
+##  Data Processing
+
+Gathered data undergoes meticulous preprocessing to optimize the model's performance. Classification into six distinct classes is complemented by the application of data augmentation techniques, mitigating potential overfitting.
+
+##  Model Development
+
+Implementing transfer learning with TensorFlow Hub's MobileNet V3, we leverage pre-trained weights to achieve high accuracy. The model undergoes fine-tuning, integrating additional dense layers, dropout layers for regularization, and a softmax layer for precise classification.
+
+# Thanks for Being a Part of Wasteless Eats!
+
+Your time spent exploring Wasteless Eats is truly appreciated. By joining us in the mission to reduce food waste and embrace sustainability, you've made a significant contribution.
+
+Whether you're using, supporting, or contributing to Wasteless Eats, your involvement is pivotal. Let's continue creating a community that values shared resources and environmental consciousness.
+
+As you navigate through Wasteless Eats, your commitment to positive change is invaluable. Together, we're shaping a future where surplus resources make a difference in building a more equitable and waste-conscious society.
+
+Thank you for your interest and participation. Here's to a sustainable and fulfilling experience with Wasteless Eats! 🌍🍽️
