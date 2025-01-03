@@ -1,4 +1,4 @@
-# Wasteless Eats
+# Wasteless Eats *Project part of a hackfest
 
 Welcome to Wasteless Eats – an innovative solution addressing food waste and promoting sustainability.
 
