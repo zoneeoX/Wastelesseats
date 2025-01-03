@@ -2,21 +2,6 @@
 
 Welcome to Wasteless Eats – an innovative solution addressing food waste and promoting sustainability.
 
-# Team Description 
-
-Meet the dynamic minds driving Wasteless Eats to success:
-
-👨‍💻 **Hacker Team:**
-   - Fadel Najmi Adliansyah
-   - Raja Revanery Ramadhan
-
-💼 **Hustler:**
-   - Muhammad Syifa Ghazaly
-
-🎨 **Hipster:**
-   - Usamah Abdul Aziz
-
-
 ## Mission
 
 Bridge the gap between surplus, imperfect food, and those who can benefit. Wasteless Eats extends beyond edibles; it's a platform for donating/selling various items, including electronics, books, and more.
